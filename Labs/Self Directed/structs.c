@@ -24,8 +24,31 @@ int main()
     {
         baseArr[i] = addStudent();
 
+        char ans;
 
+        printf("Would you like to add another student? (Y/N)");
+        scanf(" %c", &ans);
+
+        ans = tolower(ans);
+
+        if(ans == 'n')
+        {
+            break;
+        }
+        else
+        {
+            counter++;
+        }
     }
+
+    struct Student arr[counter];
+
+    for(int i = 0; i < counter; i++)
+    {
+        arr[i] = baseArr[i];
+    }
+
+    
 
     return 0;
 }
