@@ -1,71 +1,103 @@
 #include <stdio.h>
+#include <ctype.h>
 
-float* sort(float*, int);
-void printArr(float*, int);
+double basePrice(int);
 
 int main()
 {
-    float a[8] = {4.35, 4.532, 4.1234, 3.0449, 2.34543, 1.345, 9.34, 6.765};
+    int age;
+    int showtime;
+    char glasses;
 
-    int count = sizeof(a) / sizeof(a[0]);   
-    
-    printArr(a, count);
-
-    float* b = sort(a, count);
-
-    printArr(b, count);
-}
-
-int findHighest(float arr[], int len)
-{
-    float highest = arr[0];
-    int highestIndex = 0;
-
-    for(int i = 0; i < len; i++)
+    while(1)
     {
-        if(arr[i] > highest)
+        printf("Enter age: ");
+        scanf("%d", &age);
+        if(age > 0 && age <= 120)
         {
-            highest = arr[i];
-            highestIndex = i;
+            break;
+        }
+        else
+        {
+            printf("Invalid age.\n");
         }
     }
 
-    return highestIndex;
-}
-
-float* sort(float arr[], int len)
-{
-    float* sorted;
-
-    sorted[0] = arr[findHighest(arr, len)];
-
-    float arrToSearch[len];
-
-    for(int i = 1; i < len; i++)
+    while(1)
     {
-        for(int j = 0; j < len; j++)
+        printf("Showtime (1 = Matinee, 2 = Evening, 3 = Late): ");
+        scanf("%d", &showtime);
+        if(showtime >= 1 && showtime <= 3)
         {
-            if(arr[j] == sorted[i - 1])
-            {
-                arrToSearch[j] = -1000.0f;
-            }
-            else 
-            {
-                arrToSearch[j] = arr[j];
-            }
+            break;
         }
-
-        sorted[i] = findHighest(arrToSearch, len);
+        else
+        {
+            printf("Invalid showtime.\n");
+        }
     }
 
-    return sorted;
+    while(1)
+    {
+        printf("3D glasses (Y/N): ");
+        scanf(" %c", &glasses);
+        glasses = tolower(glasses);
+        if(glasses == 'y' || glasses == 'n')
+        {
+            break;
+        }
+        else
+        {
+            printf("Invalid choice.\n");
+        }
+    }
+
+    double totalPrice = basePrice(age);
+    printf("Base price: $%0.2lf\n", totalPrice);
+
+    switch(showtime)
+    {
+        case (1):
+            totalPrice += -2.0;
+            printf("Showtime adjustment: %+0.2f\n", -2.0);
+            break;
+        case (2):
+            printf("Showtime adjustment: %+0.2f\n", 0.0);
+            break;
+        case (3):
+            totalPrice += 1.5;
+            printf("Showtime adjustment: %+0.2f\n", 1.5);
+            break;
+        default:
+            printf("Invalid showtime after check.\n");
+            return 1;
+    }
+
+    if(glasses == 'y')
+    {
+        printf("3D glasses: $3.00\n");
+        totalPrice += 3.0;
+    }
+    else
+    {
+        printf("3D glasses: $0.00\n");
+    }
+    printf("Ticket total: $%0.2lf\n", totalPrice);
+    return 0;
 }
 
-void printArr(float* arr, int len)
+double basePrice(int age)
 {
-    for(int i = 0; i < len; i++)
+    if(age <= 12)
     {
-        printf("%f ", arr[i]);
+        return 6;
     }
-    printf("\n");
+    else if (age > 12 && age < 65) 
+    {
+        return 11;
+    }
+    else if (age >= 65) 
+    {
+        return 7.5;
+    }
 }
