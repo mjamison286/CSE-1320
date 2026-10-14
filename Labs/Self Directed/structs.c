@@ -1,12 +1,14 @@
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
 #define MAX_STUDENTS 10
 
 struct Student
 {
-    char* name;
+    char name[20];
     int age;
-    char* major;
+    char major[50];
     float gpa;
 };
 
@@ -20,25 +22,28 @@ int main()
 
     int counter = 0;
 
-    for(int i = 0; i < MAX_STUDENTS; i++)
+    while(counter < MAX_STUDENTS)
     {
-        baseArr[i] = addStudent();
+        printf("Entering data for student %d.\n", counter + 1);
+        baseArr[counter] = addStudent();
 
-        char ans;
+        counter++;
 
-        printf("Would you like to add another student? (Y/N)");
-        scanf(" %c", &ans);
-
-        ans = tolower(ans);
-
-        if(ans == 'n')
+        if(counter != MAX_STUDENTS)
         {
-            break;
-        }
-        else
-        {
-            counter++;
-        }
+            char ans;
+            
+            printf("Would you like to add another student? (Y/N): ");
+            scanf(" %c", &ans);
+            while(getchar() != '\n');
+
+            ans = tolower(ans);
+
+            if(ans == 'n')
+            {
+                break;
+            }
+        }  
     }
 
     struct Student arr[counter];
@@ -48,7 +53,11 @@ int main()
         arr[i] = baseArr[i];
     }
 
-    
+    displayStudents(arr, counter);
+
+    double average = calculateAverageGPA(arr, counter);
+
+    printf("\nAverage GPA of all students: %0.2lf", average);
 
     return 0;
 }
@@ -58,35 +67,51 @@ struct Student addStudent()
     struct Student student;
 
     printf("Enter the student's name: ");
-    scanf("%s", &student.name);
+    fgets(student.name, sizeof(student.name), stdin);
+    student.name[strcspn(student.name, "\n")] = '\0';
 
     while(1)
     {
         printf("Enter the student's age: ");
         scanf("%d", &student.age);
+        while(getchar() != '\n');
 
-        if(student.age > 0)
+        if(student.age <= 0)
         {
-            break;
+            printf("Please enter a valid age.\n");
         }
         else
         {
-            printf("Please enter a proper age.\n");
+            break;
         }
     }
 
     printf("Enter the student's major: ");
-    scanf("%s", &student.major);
+    fgets(student.major, sizeof(student.major), stdin);
+    student.major[strcspn(student.major, "\n")] = '\0';
 
-    printf("Enter the student's GPA (0.0 - 4.0): ");
-    scanf("%f", &student.gpa);
+    while(1)
+    {
+        printf("Enter the student's GPA (0.0 - 4.0): ");
+        scanf("%f", &student.gpa);  
+        while(getchar() != '\n');
+
+        if(student.gpa < 0 || student.gpa > 4)
+        {
+            printf("Please enter a valid GPA.\n");
+        }
+        else
+        {
+            break;
+        }
+    }
 
     return student;
 }
 
 void displayStudents(struct Student students[], int len)
 {
-    printf("Student Records:\n");
+    printf("\nStudent Records:\n");
     for(int i = 0; i < len; i++)
     {
         printf("Student %d: Name: %s   Age: %d   Major: %s   GPA: %0.2f\n", i + 1, students[i].name, students[i].age, students[i].major, students[i].gpa);
