@@ -1,3 +1,8 @@
+// Author: Marshall Jamison
+// Program: Registrar's Office, Struct Edition
+// Purpose: This program takes in data for students and allows to view many student's data all at once.
+// Reflection: I would say that the trickiest part to get right would be all of the input validation.
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -12,57 +17,50 @@ struct Student
     float gpa;
 };
 
-struct Student addStudent();
+struct Student readStudent();
 void displayStudents(struct Student[], int);
 double calculateAverageGPA(struct Student[], int);
 
 int main()
 {
-    struct Student baseArr[MAX_STUDENTS];
+    struct Student students[MAX_STUDENTS];
 
-    int counter = 0;
+    int studentCount = 0;
 
-    while(counter < MAX_STUDENTS)
+    while(studentCount < MAX_STUDENTS)
     {
-        printf("Entering data for student %d.\n", counter + 1);
-        baseArr[counter] = addStudent();
+        printf("Entering data for student %d.\n", studentCount + 1);
+        students[studentCount] = readStudent();
 
-        counter++;
+        studentCount++;
 
-        if(counter != MAX_STUDENTS)
+        if(studentCount != MAX_STUDENTS)
         {
-            char ans;
+            char answer;
             
             printf("Would you like to add another student? (Y/N): ");
-            scanf(" %c", &ans);
+            scanf(" %c", &answer);
             while(getchar() != '\n');
 
-            ans = tolower(ans);
+            answer = tolower(answer);
 
-            if(ans == 'n')
+            if(answer == 'n')
             {
                 break;
             }
         }  
     }
 
-    struct Student arr[counter];
+    displayStudents(students, studentCount);
 
-    for(int i = 0; i < counter; i++)
-    {
-        arr[i] = baseArr[i];
-    }
-
-    displayStudents(arr, counter);
-
-    double average = calculateAverageGPA(arr, counter);
+    double average = calculateAverageGPA(students, studentCount);
 
     printf("\nAverage GPA of all students: %0.2lf", average);
 
     return 0;
 }
 
-struct Student addStudent()
+struct Student readStudent()
 {
     struct Student student;
 
