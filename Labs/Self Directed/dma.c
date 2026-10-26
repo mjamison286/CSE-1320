@@ -1,3 +1,9 @@
+// Author: Marshall Jamison
+// Program: The Library's Memory Vault
+// Purpose: Allows for people to input information about books held in a library.
+// Reflection: The hardest part about this assignment was making sure that I was actually accessing the
+// data that I meant to access, which means that I was making sure that my pointer symbols and notation was proper.
+
 #include <stdio.h>
 #include <stdlib.h>
 
